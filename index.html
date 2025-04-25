@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Feliz 18 :)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #ffe6f0;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100vh;
+    }
+
+    h1 {
+      color: #d63384;
+      font-size: 1.8em;
+      margin-top: 50px;
+      text-align: center;
+      padding: 0 20px;
+    }
+
+    .buttons {
+      position: relative;
+      width: 100%;
+      height: 100px;
+      margin-top: 40px;
+    }
+
+    button {
+      background-color: #ffb6c1;
+      border: none;
+      padding: 12px 24px;
+      font-size: 1.2em;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: absolute;
+      z-index: 2;
+    }
+
+    .message {
+      margin-top: -20px;
+      margin-bottom: 40px;
+      font-size: 1.6em;
+      color: #d63384;
+      text-align: center;
+      padding: 0 20px;
+    }
+
+    .hearts {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .heart {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      background: url('scr/jose.png') no-repeat center center;
+      background-size: cover;
+      animation: floatUp 8s linear forwards;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100vh) scale(0.5);
+        opacity: 0;
+      }
+    }
+
+    /* Contenedor en forma de corazón */
+    .video-heart {
+      position: fixed;
+      top: 60%;     /* ajustable al gusto */
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 270px;  /* ligeramente más grande */
+      height: 270px; /* para dar margen al clip-path */
+      aspect-ratio: 1 / 1;
+      z-index: 999;
+      clip-path: path("M135 30 C135 -30, 0 -30, 0 60 C0 135, 135 250, 135 250 C135 250, 270 135, 270 60 C270 -30, 135 -30, 135 30 Z");
+      display: none;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+    }
+
+    /* Video cubriendo totalmente el contenedor */
+    .video-heart video {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 120%;   /* 20% más grande */
+      height: 120%;  /* 20% más grande */
+      transform: translate(-50%, -50%);
+      object-fit: cover;
+      object-position: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>¿Cuántos años cumple mi peque? :)</h1>
+  <div class="buttons">
+    <button id="btn15">15</button>
+    <button id="btn18" style="left: 100px;">18</button>
+  </div>
+  <div class="message" id="message"></div>
+  <div class="hearts" id="hearts"></div>
+
+  <!-- Video en forma de corazón -->
+  <div class="video-heart" id="videoHeart">
+    <video src="scr/jose.mp4" id="video" autoplay loop muted playsinline></video>
+  </div>
+
+  <audio id="audio" src="scr/jose.mp3" preload="auto"></audio>
+
+  <script>
+    const btn15 = document.getElementById('btn15');
+    const btn18 = document.getElementById('btn18');
+    const message = document.getElementById('message');
+    const heartsContainer = document.getElementById('hearts');
+    const audio = document.getElementById('audio');
+    const videoHeart = document.getElementById('videoHeart');
+
+    const messages = [
+      "¡No seas mentirosa! >:)",
+      "¡Vamos, di la verdad! ;)",
+      "¡Ya no tienes 15! :D",
+      "¡Acepta tus 18 con orgullo! :)",
+      "¡Eres una adulta ahora! ;)"
+    ];
+
+    btn15.addEventListener('click', () => {
+      const btnW = btn15.offsetWidth, btnH = btn15.offsetHeight;
+      const x = Math.random() * (window.innerWidth - btnW);
+      const y = Math.random() * (window.innerHeight - btnH - 120);
+      btn15.style.left = `${x}px`;
+      btn15.style.top  = `${y}px`;
+      message.textContent = messages[Math.floor(Math.random() * messages.length)];
+    });
+
+    btn18.addEventListener('click', () => {
+      message.textContent = "¡Feliz 18 cumpleaños, mi peque! :D";
+      btn15.style.display   = 'none';
+      btn18.style.display   = 'none';
+      videoHeart.style.display = 'block';
+      createHearts();
+      audio.play().catch(e => console.log("Audio no reproducido:", e));
+    });
+
+    function createHearts() {
+      for (let i = 0; i < 100; i++) {
+        const heart = document.createElement('div');
+        heart.classList.add('heart');
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.bottom = '0px';
+        heart.style.animationDuration = (Math.random() * 4 + 6) + 's';
+        heartsContainer.appendChild(heart);
+        setTimeout(() => heart.remove(), 10000);
+      }
+    }
+  </script>
+</body>
+</html>
